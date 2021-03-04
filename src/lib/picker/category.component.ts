@@ -95,6 +95,8 @@ export class CategoryComponent implements OnInit {
   @Input() emojiTooltip!: Emoji['tooltip'];
   @Input() emojiBackgroundImageFn?: Emoji['backgroundImageFn'];
   @Input() emojiUseButton?: boolean;
+  @Input() isLocalStorageAccessible: any;
+  @Input() storageObject: any = {};
   @Output() emojiOver: Emoji['emojiOver'] = new EventEmitter();
   @Output() emojiLeave: Emoji['emojiLeave'] = new EventEmitter();
   @Output() emojiClick: Emoji['emojiClick'] = new EventEmitter();
@@ -162,7 +164,7 @@ export class CategoryComponent implements OnInit {
 
   getEmojis() {
     if (this.name === 'Recent') {
-      let frequentlyUsed = this.recent || this.frequently.get(this.perLine, this.totalFrequentLines);
+      let frequentlyUsed = this.recent || this.frequently.get(this.perLine, this.totalFrequentLines, this.isLocalStorageAccessible, this.storageObject);
       if (!frequentlyUsed || !frequentlyUsed.length) {
         frequentlyUsed = this.frequently.get(this.perLine, this.totalFrequentLines);
       }

@@ -27,13 +27,17 @@ export class EmojiFrequentlyService {
     'poop',
   ];
 
-  init() {
-    this.frequently = JSON.parse(localStorage.getItem(`${this.NAMESPACE}.frequently`) || 'null');
+  init(isLocalStorageAccessible = true, storageObject: any = {}) {
+    if (isLocalStorageAccessible) {
+      this.frequently = JSON.parse(localStorage.getItem(`${this.NAMESPACE}.frequently`) || 'null');
+    } else {
+      this.frequently = JSON.parse(storageObject.getItem(`${this.NAMESPACE}.frequently`) || 'null');
+    }
     this.initialized = true;
   }
-  add(emoji: EmojiData) {
+  add(emoji: EmojiData, isLocalStorageAccessible = true, storageObject: any = {}) {
     if (!this.initialized) {
-      this.init();
+      this.init(isLocalStorageAccessible, storageObject);
     }
     if (!this.frequently) {
       this.frequently = this.defaults;
@@ -43,12 +47,17 @@ export class EmojiFrequentlyService {
     }
     this.frequently[emoji.id] += 1;
 
-    localStorage.setItem(`${this.NAMESPACE}.last`, emoji.id);
-    localStorage.setItem(`${this.NAMESPACE}.frequently`, JSON.stringify(this.frequently));
+    if (isLocalStorageAccessible) {
+      localStorage.setItem(`${this.NAMESPACE}.last`, emoji.id);
+      localStorage.setItem(`${this.NAMESPACE}.frequently`, JSON.stringify(this.frequently));
+    } else {
+      storageObject.setItem(`${this.NAMESPACE}.last`, emoji.id);
+      storageObject.setItem(`${this.NAMESPACE}.frequently`, JSON.stringify(this.frequently));
+    }
   }
-  get(perLine: number, totalLines: number) {
+  get(perLine: number, totalLines: number, isLocalStorageAccessible = true, storageObject: any = {}) {
     if (!this.initialized) {
-      this.init();
+      this.init(isLocalStorageAccessible, storageObject);
     }
     if (this.frequently === null) {
       this.defaults = {};
@@ -69,7 +78,12 @@ export class EmojiFrequentlyService {
       .reverse();
     const sliced = sorted.slice(0, quantity);
 
-    const last = localStorage.getItem(`${this.NAMESPACE}.last`);
+    let last;
+    if (isLocalStorageAccessible) {
+      last = localStorage.getItem(`${this.NAMESPACE}.last`);
+    } else {
+      last = storageObject.getItem(`${this.NAMESPACE}.last`);
+    }
 
     if (last && !sliced.includes(last)) {
       sliced.pop();

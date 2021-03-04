@@ -100,6 +100,8 @@ export class PickerComponent implements OnInit {
   @Input() enableFrequentEmojiSort = false;
   @Input() enableSearch = true;
   @Input() showSingleCategory = false;
+  @Input() storageObject: any = {};
+  @Input() isLocalStorageAccessible = true;
   @Output() emojiClick = new EventEmitter<any>();
   @Output() emojiSelect = new EventEmitter<any>();
   @Output() skinChange = new EventEmitter<Emoji['skin']>();
@@ -153,9 +155,11 @@ export class PickerComponent implements OnInit {
 
     this.i18n = { ...I18N, ...this.i18n };
     this.i18n.categories = { ...I18N.categories, ...this.i18n.categories };
-    this.skin =
-      JSON.parse(localStorage.getItem(`${this.NAMESPACE}.skin`) || 'null') ||
-      this.skin;
+    if (this.isLocalStorageAccessible) {
+      this.skin = JSON.parse(localStorage.getItem(`${this.NAMESPACE}.skin`) || 'null') || this.skin;
+    } else {
+      this.skin = this.storageObject.getItem(`${this.NAMESPACE}.skin`) || this.skin;
+    }
 
     const allCategories = [...categories];
 
@@ -378,7 +382,7 @@ export class PickerComponent implements OnInit {
     }
 
     if (!this.hideRecent && !this.recent && emoji) {
-      this.frequently.add(emoji);
+      this.frequently.add(emoji, this.isLocalStorageAccessible, this.storageObject);
     }
 
     const component = this.categoryRefs.toArray()[1];
@@ -419,7 +423,11 @@ export class PickerComponent implements OnInit {
   }
   handleSkinChange(skin: Emoji['skin']) {
     this.skin = skin;
-    localStorage.setItem(`${this.NAMESPACE}.skin`, String(skin));
+    if (this.isLocalStorageAccessible) {
+      localStorage.setItem(`${this.NAMESPACE}.skin`, String(skin));
+    } else {
+      this.storageObject.setItem(`${this.NAMESPACE}.skin`, String(skin));
+    }
     this.skinChange.emit(skin);
   }
   getWidth(): string {
