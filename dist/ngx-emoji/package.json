@@ -1,0 +1,16 @@
+{
+  "name": "@ctrl/ngx-emoji-mart/ngx-emoji",
+  "author": "scttcper",
+  "repository": "scttcper/ngx-emoji-mart",
+  "license": "MIT",
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "../bundles/ctrl-ngx-emoji-mart-ngx-emoji.umd.js",
+  "module": "../fesm2015/ctrl-ngx-emoji-mart-ngx-emoji.js",
+  "es2015": "../fesm2015/ctrl-ngx-emoji-mart-ngx-emoji.js",
+  "esm2015": "../esm2015/ngx-emoji/ctrl-ngx-emoji-mart-ngx-emoji.js",
+  "fesm2015": "../fesm2015/ctrl-ngx-emoji-mart-ngx-emoji.js",
+  "typings": "ctrl-ngx-emoji-mart-ngx-emoji.d.ts",
+  "metadata": "ctrl-ngx-emoji-mart-ngx-emoji.metadata.json"
+}
