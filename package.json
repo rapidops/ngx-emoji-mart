@@ -2,9 +2,13 @@
   "name": "@ctrl/ngx-emoji-mart",
   "version": "0.0.0-placeholder",
   "license": "MIT",
+   "files": [
+    "dist/*"
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prepare": "npm run build",
     "build": "del-cli dist && ts-node -O '{ \"module\": \"commonjs\" }' build.ts",
     "build-data": "ts-node --project=scripts/tsconfig.json scripts/build-data.ts",
     "test": "ng test --watch=false --browsers=ChromeCI",
